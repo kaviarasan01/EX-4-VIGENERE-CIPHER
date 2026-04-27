@@ -30,7 +30,72 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 
 
 ## PROGRAM
+```C
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Function to perform Vigenere encryption
+// Changed "char text" to "char *text" to pass the string by reference
+void vigenereEncrypt(char *text, const char *key) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        // Ensure the key character used is always uppercase for consistent math
+        char k = toupper(key[i % keyLen]);
+
+        if (c >= 'A' && c <= 'Z') {
+            // Encrypt uppercase letters
+            text[i] = ((c - 'A' + (k - 'A')) % 26) + 'A';
+        } else if (c >= 'a' && c <= 'z') {
+            // Encrypt lowercase letters
+            text[i] = ((c - 'a' + (k - 'A')) % 26) + 'a';
+        }
+        // Non-alphabetic characters are skipped
+    }
+}
+
+// Function to perform Vigenere decryption
+void vigenereDecrypt(char *text, const char *key) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        char k = toupper(key[i % keyLen]);
+
+        if (c >= 'A' && c <= 'Z') {
+            // Decrypt uppercase letters (add 26 before modulo to handle negative results)
+            text[i] = ((c - 'A' - (k - 'A') + 26) % 26) + 'A';
+        } else if (c >= 'a' && c <= 'z') {
+            // Decrypt lowercase letters
+            text[i] = ((c - 'a' - (k - 'A') + 26) % 26) + 'a';
+        }
+    }
+}
+
+int main() {
+    const char *key = "KEY";
+    char message[] = "This is a secret message."; 
+
+    printf("Original Message: %s\n", message);
+
+    // Encrypt the message
+    vigenereEncrypt(message, key);
+    printf("Encrypted Message: %s\n", message);
+
+    // Decrypt the message back to the original
+    vigenereDecrypt(message, key);
+    printf("Decrypted Message: %s\n", message);
+
+    return 0;
+}
+```
 
 ## OUTPUT
+<img width="1500" height="978" alt="image" src="https://github.com/user-attachments/assets/02900829-05d1-4972-ae10-26be0d67967f" />
+
 
 ## RESULT
